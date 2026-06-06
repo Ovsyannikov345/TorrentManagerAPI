@@ -13,14 +13,17 @@ ENV ASPNETCORE_HTTP_PORTS=8080
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
+
 WORKDIR /src
 
-COPY ["TorrentManagerAPI/TorrentManagerAPI/TorrentManagerAPI.csproj", "TorrentManagerAPI/TorrentManagerAPI/"]
-RUN dotnet restore "./TorrentManagerAPI/TorrentManagerAPI/TorrentManagerAPI.csproj"
+COPY ["TorrentManagerAPI/TorrentManagerAPI.csproj", "TorrentManagerAPI/"]
+
+RUN dotnet restore "./TorrentManagerAPI/TorrentManagerAPI.csproj"
 
 COPY . .
 
-WORKDIR "/src/TorrentManagerAPI/TorrentManagerAPI"
+WORKDIR "/src/TorrentManagerAPI"
+
 RUN dotnet build "./TorrentManagerAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
